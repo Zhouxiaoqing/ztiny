@@ -3,12 +3,12 @@
 #include "lex.h"
 
 typedef enum {
-	START, 
+	START, 					// 0
 	INASSIGN, 
 	INCOMMENT, 
 	INNUM, 
 	INID, 
-	DONE
+	DONE					// 5
 } StateType;
 
 char token_string[MAX_TOKEN_LEN+1];
@@ -26,6 +26,9 @@ get_next_char() {
 	if (line_pos >= buff_size) {
 		line_no ++;
 		if (fgets(line_buff, MAX_LINE_BUFF-1, source)) {
+
+			fprintf(listing, "-> 重新读取新的一行 : %s \n", line_buff);
+
 			buff_size = strlen(line_buff);
 			line_pos = 0;
 			return line_buff[line_pos++];
@@ -68,7 +71,7 @@ _reserved_lookup(char *s) {
 		if (0 == strcmp(reserved_words[i].str, s)){
 			return reserved_words[i].tok;
 		}
-		i--;
+		i++;
 	}
 
 	return ID;
@@ -97,6 +100,9 @@ TokenType get_token(void) {
 
 	while (state != DONE) {
 		int c = get_next_char();
+
+		fprintf(listing, "-> char : %c \n", (char)c);
+
 		save = TRUE;
 		switch (state) {
 			case START:
@@ -105,7 +111,7 @@ TokenType get_token(void) {
 					state = INNUM;
 				else if (_is_alpha((char)c))
 					state = INID;
-				else if (c == ' ' || c == '\t' || c == '\n')
+				else if (c == ' ' || c == '\t' || c == '\r' || c == '\n')
 					save = FALSE;
 				else if (c == ':') {
 					save = FALSE;
@@ -200,8 +206,11 @@ TokenType get_token(void) {
 		// do save ..
 		if (save) {
 			token_string[token_string_pos++] = (char)c;
+			fprintf(listing, token_string);
 		}
 	}
+
+	token_string[token_string_pos] = '\0';
 
 	// for `TEST'
 	print_token(current_token, token_string);
