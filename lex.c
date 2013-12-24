@@ -13,8 +13,9 @@ typedef enum {
 
 char token_string[MAX_TOKEN_LEN+1];
 
-#define MAX_LINE_BUFF 256;
-static char *line_buff[MAX_LINE_BUFF];
+#define MAX_LINE_BUFF 256
+
+static char line_buff[MAX_LINE_BUFF];
 static int line_pos = 0;
 static int buff_size = 0;			// strlen(line_buff)
 
@@ -61,7 +62,7 @@ static struct {
 };
 
 static TokenType
-reserved_lookup(char *s) {
+_reserved_lookup(char *s) {
 	int i = 0;
 	while (i < MAX_RESERVED_WORDS) {
 		if (0 == strcmp(reserved_words[i].str, s)){
@@ -152,13 +153,13 @@ TokenType get_token(void) {
 						default :
 							current_token = ERROR;
 							break;
-					}
+					} // endof `switch'
 				}
 				break;
 			case INCOMMENT:
 				save = FALSE;
 				if (c == EOF) {
-					DONE = ENDFILE;
+					state = DONE;
 					current_token = ENDFILE;
 				}else if (c == '}')
 					state = START;
@@ -176,10 +177,24 @@ TokenType get_token(void) {
 			case INNUM:
 				if (!_is_digit(c)) {
 					unget_next_char();
+					save = FALSE;			// 退还的char不存
 					state = DONE;
-
+					current_token = NUM;
 				}
 			case INID:
+				if (!_is_alpha(c)) {
+					unget_next_char();
+					save = FALSE;
+					state = DONE;
+					current_token = _reserved_lookup(token_string);
+				}
+				break;
+			case DONE : // should never happen
+			default :
+				fprintf(listing, " [Error] lex BUG, current state = %d\n", state);
+				state = DONE;
+				current_token = ERROR;
+				break;
 		} // endof `switch'
 
 		// do save ..
@@ -189,7 +204,7 @@ TokenType get_token(void) {
 	}
 
 	// for `TEST'
-	print_token(current_token, token_string_pos);
+	print_token(current_token, token_string);
 
 	return current_token;
 }

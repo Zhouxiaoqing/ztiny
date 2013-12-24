@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_RESERVED_WORDS 8;
+#define MAX_RESERVED_WORDS 8
 
 #ifndef TRUE
 #define TRUE 1
