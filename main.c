@@ -26,11 +26,8 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	fprintf(listing, " Start lex --> \n");
-
+	// lex 'TEST'
 	while(get_token() != ENDFILE) ;
-
-	fprintf(listing, "END\n");
 
 	return 0;
 }

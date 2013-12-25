@@ -26,9 +26,6 @@ get_next_char() {
 	if (line_pos >= buff_size) {
 		line_no ++;
 		if (fgets(line_buff, MAX_LINE_BUFF-1, source)) {
-
-			fprintf(listing, "-> 重新读取新的一行 : %s \n", line_buff);
-
 			buff_size = strlen(line_buff);
 			line_pos = 0;
 			return line_buff[line_pos++];
@@ -100,8 +97,6 @@ TokenType get_token(void) {
 
 	while (state != DONE) {
 		int c = get_next_char();
-
-		fprintf(listing, "-> char : %c \n", (char)c);
 
 		save = TRUE;
 		switch (state) {
@@ -187,12 +182,13 @@ TokenType get_token(void) {
 					state = DONE;
 					current_token = NUM;
 				}
+				break;
 			case INID:
 				if (!_is_alpha(c)) {
 					unget_next_char();
 					save = FALSE;
 					state = DONE;
-					current_token = _reserved_lookup(token_string);
+					current_token = ID;//_reserved_lookup(token_string);
 				}
 				break;
 			case DONE : // should never happen
@@ -206,11 +202,13 @@ TokenType get_token(void) {
 		// do save ..
 		if (save) {
 			token_string[token_string_pos++] = (char)c;
-			fprintf(listing, token_string);
 		}
 	}
 
 	token_string[token_string_pos] = '\0';
+	if (current_token == ID) {
+		current_token = _reserved_lookup(token_string);
+	}
 
 	// for `TEST'
 	print_token(current_token, token_string);
