@@ -12,7 +12,7 @@ print_token(TokenType type, const char *token_string) {
 		case UNTIL:
 		case READ:
 		case WRITE:
-			fprintf(listing, " reverse words : %s \n", token_string);
+			fprintf(listing, "Reverse words : %s \n", token_string);
 			break;
 		case ASSIGN: fprintf(listing, ":=\n"); break;
 		case LT: fprintf(listing, "<\n"); break;
@@ -47,12 +47,45 @@ copy_string(const char *str) {
 
 	char *s = (char *)malloc(strlen(str) + 1);
 	int i = 0;
-	while ( (s[i] = str[i]) != '\0' ) {
-		
+	while ((s[i] = str[i]) != '\0')
 		i++;
-	}
 	s[i] = '\0';
 
 	return s;
 }
 
+TreeNode *
+new_stmt_node(StmtKind kind) {
+	TreeNode *t = (TreeNode*)malloc(sizeof(TreeNode));
+	int i;
+	for(i=0; i<3; i++)
+		t->child[i] = NULL;
+	t->sibling = NULL;
+
+	t->node_kind = StmtK;
+	t->kind.sk = kind;
+	t->line_no = line_no;
+
+	return t;
+}
+
+TreeNode *
+new_exp_node(ExpKind kind) {
+	TreeNode *t = (TreeNode*)malloc(sizeof(TreeNode));
+	int i;
+	for(i=0; i<3; i++)
+		t->child[i] = NULL;
+	t->sibling = NULL;
+
+	t->node_kind = ExpK;
+	t->kind.ek = kind;
+	t->line_no = line_no;
+
+	return t;
+}
+
+void print_tree(TreeNode *t) {
+	if (!t)
+		return;
+	
+}

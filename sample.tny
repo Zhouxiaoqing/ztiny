@@ -1,3 +1,6 @@
+{
+	This is comment.
+}
 read x; { input an integer }
 if 0 < x then { don't compute if x <= 0 }
   fact := 1;

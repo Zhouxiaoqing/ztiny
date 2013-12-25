@@ -4,7 +4,7 @@ CC = gcc
 CFLAGS = -g -Wall
 LFLAGS = 
 
-OBJS = main.o lex.o util.o
+OBJS = main.o lex.o util.o parser.o
 
 twt : ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} -o twt
@@ -17,6 +17,9 @@ lex.o : global.h lex.h lex.c
 
 util.o : global.h util.h util.c
 	${CC} ${CFLAGS} -c util.c
+
+parser.o : global.h parser.h parser.c
+	${CC} ${CFLAGS} -c parser.c
 
 clean :
 	-rm -rf *.o
