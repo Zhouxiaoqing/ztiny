@@ -16,4 +16,6 @@ new_exp_node(ExpKind kind);
 
 void print_tree(TreeNode *t);
 
+void free_tree(TreeNode *t);
+
 #endif

@@ -84,8 +84,78 @@ new_exp_node(ExpKind kind) {
 	return t;
 }
 
+int ident_no = 0;
+
+void _print_space() {
+	int i = 0;
+	for (i=0; i<ident_no; i++)
+		fprintf(listing, " ");
+}
+
 void print_tree(TreeNode *t) {
-	if (!t)
+	ident_no += 2;
+	while(t != NULL) {
+		_print_space();
+	// 1. current node
+		if (t->node_kind == StmtK) {
+			switch(t->kind.sk) {
+				case IfK:
+					fprintf(listing, "If\n");
+					break;
+				case RepeatK:
+					fprintf(listing, "Repeat\n");
+					break;
+				case AssignK:
+					fprintf(listing, "Assign to : %s \n", t->attr.name);
+					break;
+				case ReadK:
+					fprintf(listing, "Read : %s \n", t->attr.name);
+					break;
+				case WriteK:
+					fprintf(listing, "Write \n");
+					break;
+				default:
+					fprintf(listing, "Unknown Stmt Kind. \n");
+					break;
+			}
+		}else if (t->node_kind == ExpK) {
+			switch(t->kind.ek) {
+				case OpK:
+					fprintf(listing, "Op: ");
+					print_token(t->attr.op, "\0");
+					break;
+				case ConstK:
+					fprintf(listing, "Const: %d\n", t->attr.val);
+					break;
+				case IdK:
+					fprintf(listing, "Id: %s\n", t->attr.name);
+					break;
+				default:
+					fprintf(listing, "Unknown Exp Kind. \n");
+					break;
+			}
+		}else
+			fprintf(listing, "Unknown type of node.\n");
+
+	// 2. current node children
+		int i;
+		for (i=0; i<3; i++)
+			print_tree(t->child[i]);
+	// 3. sibling
+		t = t->sibling;
+	}
+	ident_no -= 2;
+}
+
+void free_tree(TreeNode *t) {
+	if (t == NULL)
 		return;
-	
+	else {
+		int i;
+		for (i=0; i<3; i++)
+			free_tree(t->child[i]);
+		TreeNode *s = t->sibling;
+		free(t);			// really free
+		free_tree(s);
+	}
 }

@@ -1,8 +1,8 @@
+
 .PHONY: clean
 
 CC = gcc
 CFLAGS = -g -Wall
-LFLAGS = 
 
 OBJS = main.o lex.o util.o parser.o
 
@@ -24,3 +24,7 @@ parser.o : global.h parser.h parser.c
 clean :
 	-rm -rf *.o
 	-rm -rf twt
+
+rebuild :
+	-make clean
+	-make

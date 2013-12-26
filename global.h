@@ -72,9 +72,9 @@ typedef struct _TreeNode {
 		ExpKind ek;
 	}kind;
 	union {
-		TokenType op;
-		int val;
-		char *name;
+		TokenType op;				// for comparison operation exp
+		int val;				// for const exp
+		char *name;				// for ID exp
 	}attr;
 	ExpType type;					// for type check
 }TreeNode;

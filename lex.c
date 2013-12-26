@@ -211,7 +211,7 @@ TokenType get_token(void) {
 	}
 
 	// for `TEST'
-	print_token(current_token, token_string);
+//	print_token(current_token, token_string);
 
 	return current_token;
 }

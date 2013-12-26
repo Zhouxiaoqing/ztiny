@@ -1,5 +1,7 @@
 #include "global.h"
+#include "util.h"
 #include "lex.h"
+#include "parser.h"
 
 int line_no = 0;
 
@@ -27,7 +29,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	// lex 'TEST'
-	while(get_token() != ENDFILE) ;
+//	while(get_token() != ENDFILE) ;
+	
+	TreeNode *t = parse();
+	print_tree(t);
 
 	return 0;
 }
