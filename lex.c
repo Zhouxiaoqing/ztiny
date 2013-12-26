@@ -120,36 +120,18 @@ TokenType get_token(void) {
 				else {
 					state = DONE;
 					switch (c) {
+						case '+': current_token = PLUS; break;
+						case '-': current_token = MINUS; break;
+						case '*': current_token = TIMES; break;
+						case '/': current_token = OVER; break;
+						case '=': current_token = EQ; break;
+						case '<': current_token = LT; break;
+						case '(': current_token = LPAREN; break;
+						case ')': current_token = RPAREN; break;
+						case ';': current_token = SEMI; break;
 						case EOF:
 							save = FALSE;
 							current_token = ENDFILE;
-							break;
-						case '+':
-							current_token = PLUS;
-							break;
-						case '-':
-							current_token = MINUS;
-							break;
-						case '*':
-							current_token = TIMES;
-							break;
-						case '/':
-							current_token = OVER;
-							break;
-						case '=':
-							current_token = EQ;
-							break;
-						case '<':
-							current_token = LT;
-							break;
-						case '(':
-							current_token = LPAREN;
-							break;
-						case ')':
-							current_token = RPAREN;
-							break;
-						case ';':
-							current_token = SEMI;
 							break;
 						default :
 							current_token = ERROR;
